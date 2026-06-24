@@ -1,23 +1,385 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>Yuya Watanabe Portfolio</title>
-</head>
-<body>
-  <h1>Yuya Watanabe</h1>
 
-  <h2>About Me</h2>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Yuya Watanabe | Football Data Portfolio</title>
+
+  <style>
+    :root {
+      --bg: #f7f7f4;
+      --text: #1f2933;
+      --muted: #5f6c7b;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --accent: #174ea6;
+      --accent-light: #e8f0fe;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    header {
+      padding: 72px 0 56px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .profile-photo {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 5px solid #ffffff;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.15);
+      background: #ffffff;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: clamp(40px, 7vw, 72px);
+      line-height: 1.05;
+      margin: 0 0 24px;
+      letter-spacing: -0.04em;
+    }
+
+    .lead {
+      max-width: 760px;
+      font-size: 21px;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: var(--card);
+    }
+
+    .button.primary {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    section {
+      padding: 56px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h2 {
+      font-size: 28px;
+      margin: 0 0 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 20px;
+    }
+
+    .card p {
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      font-size: 13px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .experience-item {
+      margin-bottom: 28px;
+    }
+
+    .experience-item h3 {
+      margin-bottom: 4px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+
+    footer {
+      padding: 40px 0 24px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    @media (max-width: 800px) {
+      .hero,
+      .grid,
+      .two-column {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        padding-top: 40px;
+      }
+
+      .profile-photo {
+        width: 140px;
+        height: 140px;
+      }
+
+      .lead {
+        font-size: 18px;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+  <main class="container">
+
+```
+<header>
+  <div class="hero">
+    <div>
+      <img class="profile-photo" src="profile.jpg" alt="Photo of Yuya Watanabe" />
+    </div>
+
+    <div>
+      <div class="eyebrow">Football Data / Recruitment Analytics / Applied AI</div>
+
+      <h1>Yuya Watanabe</h1>
+
+      <p class="lead">
+        MSc Sport Analytics and Technologies student at Loughborough University,
+        with experience as a Data Scientist and AI Engineer. I build data-driven
+        analysis and tools for football recruitment, player evaluation,
+        performance analysis, and applied AI.
+      </p>
+
+      <div class="links">
+        <a class="button primary" href="#projects">View Projects</a>
+        <a class="button" href="https://github.com/LouisYWatanabe" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="button" href="https://www.linkedin.com/in/yuya-watanabe-2531ba193/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="button" href="Yuya_Watanabe_CV.pdf" target="_blank" rel="noopener noreferrer">CV</a>
+        <a class="button" href="mailto:y.cesc0203@gmail.com">Email</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <h2>About</h2>
+
+  <div class="two-column">
+    <div>
+      <p>
+        I am interested in how data can support better football decisions,
+        especially in recruitment, scouting, player profiling, and performance
+        analysis. My current focus is building practical football analytics
+        projects that are clear, reproducible, and useful for decision-making.
+      </p>
+    </div>
+
+    <div>
+      <p>
+        Before my MSc, I worked in data science and AI consulting, including
+        generative AI adoption, machine learning projects, and enterprise data
+        initiatives. I am now applying that technical background to football
+        analytics and sport technology.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <h2>Selected Projects</h2>
+
+  <div class="grid">
+    <article class="card">
+      <h3>Football Recruitment Market Analysis</h3>
+
+      <p>
+        A framework for identifying under-explored football talent markets by
+        combining player quality signals, market attention, and recruitment
+        feasibility.
+      </p>
+
+      <div class="tag-list">
+        <span class="tag">Python</span>
+        <span class="tag">Scouting</span>
+        <span class="tag">Machine Learning</span>
+        <span class="tag">Recruitment</span>
+      </div>
+    </article>
+
+    <article class="card">
+      <h3>Player Load Profiling</h3>
+
+      <p>
+        Analysis of physical performance data using metrics such as maximum
+        velocity, anaerobic speed reserve, and high-intensity events to support
+        player monitoring.
+      </p>
+
+      <div class="tag-list">
+        <span class="tag">Performance Analysis</span>
+        <span class="tag">Data Visualisation</span>
+        <span class="tag">Physical Data</span>
+      </div>
+    </article>
+
+    <article class="card">
+      <h3>Generative AI Adoption</h3>
+
+      <p>
+        Enterprise-scale generative AI adoption experience, including ChatGPT
+        Enterprise rollout, internal workshops, and business use-case development.
+      </p>
+
+      <div class="tag-list">
+        <span class="tag">GenAI</span>
+        <span class="tag">OpenAI API</span>
+        <span class="tag">AI Consulting</span>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section>
+  <h2>Experience</h2>
+
+  <div class="experience-item">
+    <h3>MSc Sport Analytics and Technologies</h3>
+    <div class="meta">Loughborough University</div>
+    <p>
+      Studying sport analytics, data-driven decision-making, and technology
+      applications in sport, with a focus on football analytics, recruitment,
+      and performance analysis.
+    </p>
+  </div>
+
+  <div class="experience-item">
+    <h3>Data Scientist / AI Engineer</h3>
+    <div class="meta">NTT DATA</div>
+    <p>
+      Worked on AI and data science projects, including generative AI adoption,
+      business use-case development, data analysis, and technical enablement
+      for enterprise users.
+    </p>
+  </div>
+</section>
+
+<section>
+  <h2>Skills</h2>
+
+  <div class="tag-list">
+    <span class="tag">Python</span>
+    <span class="tag">SQL</span>
+    <span class="tag">Machine Learning</span>
+    <span class="tag">Deep Learning</span>
+    <span class="tag">Football Analytics</span>
+    <span class="tag">Recruitment Analysis</span>
+    <span class="tag">Performance Analysis</span>
+    <span class="tag">Data Visualisation</span>
+    <span class="tag">Snowflake</span>
+    <span class="tag">OpenAI API</span>
+    <span class="tag">Generative AI</span>
+  </div>
+</section>
+
+<section>
+  <h2>Contact</h2>
+
   <p>
-    I am an MSc Sport Analytics and Technologies student at Loughborough University.
-    I am interested in football data, recruitment analytics, performance analysis, and AI.
+    I am currently looking for football data, recruitment analytics,
+    performance analysis, and sport technology opportunities.
   </p>
 
-  <h2>Projects</h2>
-  <p>Football Recruitment Market Analysis</p>
-  <p>Player Load Profiling</p>
-  <p>Generative AI Adoption</p>
+  <div class="links">
+    <a class="button primary" href="mailto:y.cesc0203@gmail.com">Email Me</a>
+    <a class="button" href="https://github.com/LouisYWatanabe" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a class="button" href="https://www.linkedin.com/in/yuya-watanabe-2531ba193/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a class="button" href="Yuya_Watanabe_CV.pdf" target="_blank" rel="noopener noreferrer">Download CV</a>
+  </div>
+</section>
 
-  <h2>Contact</h2>
-  <p>GitHub: LouisYWatanabe</p>
+<footer>
+  © 2026 Yuya Watanabe. Built with GitHub Pages.
+</footer>
+```
+
+  </main>
 </body>
 </html>
