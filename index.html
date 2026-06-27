@@ -1,5 +1,5 @@
+```html
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -139,11 +139,47 @@
       margin-top: 0;
       margin-bottom: 12px;
       font-size: 20px;
+      line-height: 1.3;
     }
 
     .card p {
       color: var(--muted);
       margin-bottom: 16px;
+    }
+
+    .project-thumb {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      background: #ffffff;
+    }
+
+    .project-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .project-links a {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      color: var(--accent);
+      background: #ffffff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .project-links a:hover {
+      background: var(--accent-light);
     }
 
     .tag-list {
@@ -201,185 +237,218 @@
       .lead {
         font-size: 18px;
       }
+
+      .project-thumb {
+        height: 200px;
+      }
     }
   </style>
-
 </head>
 
 <body>
   <main class="container">
+    <header>
+      <div class="hero">
+        <div>
+          <img class="profile-photo" src="profile.jpg" alt="Photo of Yuya Watanabe" />
+        </div>
 
-```
-<header>
-  <div class="hero">
-    <div>
-      <img class="profile-photo" src="profile.jpg" alt="Photo of Yuya Watanabe" />
-    </div>
+        <div>
+          <div class="eyebrow">Football Data / Recruitment Analytics / Applied AI</div>
 
-    <div>
-      <div class="eyebrow">Football Data / Recruitment Analytics / Applied AI</div>
+          <h1>Yuya Watanabe</h1>
 
-      <h1>Yuya Watanabe</h1>
+          <p class="lead">
+            MSc Sport Analytics and Technologies student at Loughborough University,
+            with experience as a Data Scientist and AI Engineer. I build data-driven
+            analysis and tools for football recruitment, player evaluation,
+            performance analysis, and applied AI.
+          </p>
 
-      <p class="lead">
-        MSc Sport Analytics and Technologies student at Loughborough University,
-        with experience as a Data Scientist and AI Engineer. I build data-driven
-        analysis and tools for football recruitment, player evaluation,
-        performance analysis, and applied AI.
-      </p>
-
-      <div class="links">
-        <a class="button primary" href="#projects">View Projects</a>
-        <a class="button" href="https://github.com/LouisYWatanabe" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a class="button" href="https://www.linkedin.com/in/yuya-watanabe-2531ba193/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <a class="button" href="Yuya_Watanabe_CV_June2026.pdf" target="_blank" rel="noopener noreferrer">CV</a>
-        <a class="button" href="mailto:y.cesc0203@gmail.com">Email</a>
+          <div class="links">
+            <a class="button primary" href="#projects">View Projects</a>
+            <a class="button" href="https://github.com/LouisYWatanabe" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a class="button" href="https://www.linkedin.com/in/yuya-watanabe-2531ba193/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a class="button" href="Yuya_Watanabe_CV_June2026.pdf" target="_blank" rel="noopener noreferrer">CV</a>
+            <a class="button" href="mailto:y.cesc0203@gmail.com">Email</a>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</header>
+    </header>
 
-<section>
-  <h2>About</h2>
+    <section>
+      <h2>About</h2>
 
-  <div class="two-column">
-    <div>
-      <p>
-        I am interested in how data can support better football decisions,
-        especially in recruitment, scouting, player profiling, and performance
-        analysis. My current focus is building practical football analytics
-        projects that are clear, reproducible, and useful for decision-making.
-      </p>
-    </div>
+      <div class="two-column">
+        <div>
+          <p>
+            I am interested in how data can support better football decisions,
+            especially in recruitment, scouting, player profiling, and performance
+            analysis. My current focus is building practical football analytics
+            projects that are clear, reproducible, and useful for decision-making.
+          </p>
+        </div>
 
-    <div>
-      <p>
-        Before my MSc, I worked in data science and AI consulting, including
-        generative AI adoption, machine learning projects, and enterprise data
-        initiatives. I am now applying that technical background to football
-        analytics and sport technology.
-      </p>
-    </div>
-  </div>
-</section>
+        <div>
+          <p>
+            Before my MSc, I worked in data science and AI consulting, including
+            generative AI adoption, machine learning projects, and enterprise data
+            initiatives. I am now applying that technical background to football
+            analytics and sport technology.
+          </p>
+        </div>
+      </div>
+    </section>
 
-<section id="projects">
-  <h2>Selected Projects</h2>
+    <section id="projects">
+      <h2>Selected Projects</h2>
 
-  <div class="grid">
-    <article class="card">
-      <h3>Football Recruitment Market Analysis</h3>
+      <div class="grid">
+        <article class="card">
+          <a href="projects/celtic-scouting-report.html" aria-label="View Celtic scouting report">
+            <img
+              src="assets/images/scouting-report-preview.png"
+              alt="One-page scouting report preview for the Celtic role-fit recruitment model"
+              class="project-thumb"
+            />
+          </a>
 
-      <p>
-        A framework for identifying under-explored football talent markets by
-        combining player quality signals, market attention, and recruitment
-        feasibility.
-      </p>
+          <h3>Role-Fit Recruitment Model — Celtic FC Case</h3>
+
+          <p>
+            A scouting-focused recruitment project that converts squad needs into
+            role-specific, league-adjusted player shortlists. The one-page report
+            shows how model outputs can feed practical scouting and recruitment
+            decisions.
+          </p>
+
+          <div class="tag-list">
+            <span class="tag">Python</span>
+            <span class="tag">Machine Learning</span>
+            <span class="tag">Recruitment</span>
+            <span class="tag">Scouting</span>
+            <span class="tag">Football Analytics</span>
+            <span class="tag">PFSA</span>
+          </div>
+
+          <div class="project-links">
+            <a href="projects/celtic-scouting-report.html">View scouting report</a>
+            <a href="assets/docs/Watanabe_Scouting_Model_Portfolio.pdf" target="_blank" rel="noopener noreferrer">View full deck (PDF)</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Football Recruitment Market Analysis</h3>
+
+          <p>
+            A framework for identifying under-explored football talent markets by
+            combining player quality signals, market attention, and recruitment
+            feasibility.
+          </p>
+
+          <div class="tag-list">
+            <span class="tag">Python</span>
+            <span class="tag">Scouting</span>
+            <span class="tag">Machine Learning</span>
+            <span class="tag">Recruitment</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Player Load Profiling</h3>
+
+          <p>
+            Analysis of physical performance data using metrics such as maximum
+            velocity, anaerobic speed reserve, and high-intensity events to support
+            player monitoring.
+          </p>
+
+          <div class="tag-list">
+            <span class="tag">Performance Analysis</span>
+            <span class="tag">Data Visualisation</span>
+            <span class="tag">Physical Data</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Generative AI Adoption</h3>
+
+          <p>
+            Enterprise-scale generative AI adoption experience, including ChatGPT
+            Enterprise rollout, internal workshops, and business use-case development.
+          </p>
+
+          <div class="tag-list">
+            <span class="tag">GenAI</span>
+            <span class="tag">OpenAI API</span>
+            <span class="tag">AI Consulting</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Experience</h2>
+
+      <div class="experience-item">
+        <h3>MSc Sport Analytics and Technologies</h3>
+        <div class="meta">Loughborough University London</div>
+        <p>
+          Studying sport analytics, data-driven decision-making, and technology
+          applications in sport, with a focus on football analytics, recruitment,
+          and performance analysis.
+        </p>
+      </div>
+
+      <div class="experience-item">
+        <h3>Data Scientist / AI Engineer</h3>
+        <div class="meta">NTT DATA</div>
+        <p>
+          Worked on AI and data science projects, including generative AI adoption,
+          business use-case development, data analysis, and technical enablement
+          for enterprise users.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Skills</h2>
 
       <div class="tag-list">
         <span class="tag">Python</span>
-        <span class="tag">Scouting</span>
+        <span class="tag">SQL</span>
         <span class="tag">Machine Learning</span>
-        <span class="tag">Recruitment</span>
-      </div>
-    </article>
-
-    <article class="card">
-      <h3>Player Load Profiling</h3>
-
-      <p>
-        Analysis of physical performance data using metrics such as maximum
-        velocity, anaerobic speed reserve, and high-intensity events to support
-        player monitoring.
-      </p>
-
-      <div class="tag-list">
+        <span class="tag">Deep Learning</span>
+        <span class="tag">Football Analytics</span>
+        <span class="tag">Recruitment Analysis</span>
         <span class="tag">Performance Analysis</span>
         <span class="tag">Data Visualisation</span>
-        <span class="tag">Physical Data</span>
+        <span class="tag">Snowflake</span>
+        <span class="tag">OpenAI API</span>
+        <span class="tag">Generative AI</span>
       </div>
-    </article>
+    </section>
 
-    <article class="card">
-      <h3>Generative AI Adoption</h3>
+    <section>
+      <h2>Contact</h2>
 
       <p>
-        Enterprise-scale generative AI adoption experience, including ChatGPT
-        Enterprise rollout, internal workshops, and business use-case development.
+        I am currently looking for football data, recruitment analytics,
+        performance analysis, and sport technology opportunities.
       </p>
 
-      <div class="tag-list">
-        <span class="tag">GenAI</span>
-        <span class="tag">OpenAI API</span>
-        <span class="tag">AI Consulting</span>
+      <div class="links">
+        <a class="button primary" href="mailto:y.cesc0203@gmail.com">Email Me</a>
+        <a class="button" href="https://github.com/LouisYWatanabe" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="button" href="https://www.linkedin.com/in/yuya-watanabe-2531ba193/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="button" href="Yuya_Watanabe_CV_June2026.pdf" target="_blank" rel="noopener noreferrer">Download CV</a>
       </div>
-    </article>
-  </div>
-</section>
+    </section>
 
-<section>
-  <h2>Experience</h2>
-
-  <div class="experience-item">
-    <h3>MSc Sport Analytics and Technologies</h3>
-    <div class="meta">Loughborough University</div>
-    <p>
-      Studying sport analytics, data-driven decision-making, and technology
-      applications in sport, with a focus on football analytics, recruitment,
-      and performance analysis.
-    </p>
-  </div>
-
-  <div class="experience-item">
-    <h3>Data Scientist / AI Engineer</h3>
-    <div class="meta">NTT DATA</div>
-    <p>
-      Worked on AI and data science projects, including generative AI adoption,
-      business use-case development, data analysis, and technical enablement
-      for enterprise users.
-    </p>
-  </div>
-</section>
-
-<section>
-  <h2>Skills</h2>
-
-  <div class="tag-list">
-    <span class="tag">Python</span>
-    <span class="tag">SQL</span>
-    <span class="tag">Machine Learning</span>
-    <span class="tag">Deep Learning</span>
-    <span class="tag">Football Analytics</span>
-    <span class="tag">Recruitment Analysis</span>
-    <span class="tag">Performance Analysis</span>
-    <span class="tag">Data Visualisation</span>
-    <span class="tag">Snowflake</span>
-    <span class="tag">OpenAI API</span>
-    <span class="tag">Generative AI</span>
-  </div>
-</section>
-
-<section>
-  <h2>Contact</h2>
-
-  <p>
-    I am currently looking for football data, recruitment analytics,
-    performance analysis, and sport technology opportunities.
-  </p>
-
-  <div class="links">
-    <a class="button primary" href="mailto:y.cesc0203@gmail.com">Email Me</a>
-    <a class="button" href="https://github.com/LouisYWatanabe" target="_blank" rel="noopener noreferrer">GitHub</a>
-    <a class="button" href="https://www.linkedin.com/in/yuya-watanabe-2531ba193/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-    <a class="button" href="Yuya_Watanabe_CV.pdf" target="_blank" rel="noopener noreferrer">Download CV</a>
-  </div>
-</section>
-
-<footer>
-  © 2026 Yuya Watanabe. Built with GitHub Pages.
-</footer>
-```
-
+    <footer>
+      © 2026 Yuya Watanabe. Built with GitHub Pages.
+    </footer>
   </main>
 </body>
 </html>
+```
