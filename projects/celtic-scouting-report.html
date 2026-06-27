@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scouting Report — Data Layer</title>
+<style>
+  /* ============================================================
+     DATA-HONEST ONE-PAGE SCOUTING REPORT
+     - Celtic-themed (matches the portfolio deck)
+     - GREEN  = populated from the model (Final_Task_Data per-90 + role KPIs)
+     - AMBER  = flagged for video / live-scout input (NOT in the dataset)
+     To reuse: edit the PLAYER object in the <script> block only.
+     ============================================================ */
+  :root{
+    --green:#14532D; --green-2:#0E7C5A; --gold:#E8A33D;
+    --ink:#1D2B24; --muted:#5C6B62; --line:#E4EAE6;
+    --paper:#FFFFFF; --panel:#FBFCFB; --scout:#FBF4E6; --scout-line:#EAD7AE;
+    --bar-track:#EEF2EF;
+    --elite:#0E7C5A; --good:#7FB07F; --avg:#E8A33D; --below:#C2503B;
+    --serif:"Georgia","Times New Roman",serif;
+    --sans:"Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#cfd6d1}
+  body{font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
+  .page{width:1240px;margin:0 auto;background:var(--paper)}
+
+  /* ---------- HEADER ---------- */
+  .hd{background:var(--green);color:#fff;padding:26px 34px 22px}
+  .hd-top{display:flex;justify-content:space-between;align-items:flex-start;
+    border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:14px;margin-bottom:18px}
+  .hd-top .ttl{font-family:var(--sans);letter-spacing:.34em;font-weight:700;font-size:15px}
+  .hd-top .ttl small{display:block;letter-spacing:.28em;font-weight:600;font-size:9.5px;
+    color:var(--gold);margin-top:5px}
+  .hd-top .rd{text-align:right}
+  .hd-top .rd .lab{letter-spacing:.24em;font-size:8.5px;color:#9fc4b1;font-weight:700}
+  .hd-top .rd .val{letter-spacing:.16em;font-size:13px;font-weight:700;margin-top:3px}
+  .hd-main{display:flex;gap:26px;align-items:flex-start}
+  .avatar{width:118px;height:138px;border:2px solid var(--gold);border-radius:3px;flex:0 0 auto;
+    background:linear-gradient(160deg,#0e3a20,#0b2c18);display:flex;align-items:center;justify-content:center;
+    color:#7fae90;text-align:center;font-size:9px;letter-spacing:.12em;line-height:1.5;padding:8px}
+  .id-block{flex:1 1 auto;min-width:0}
+  .id-tags{display:flex;gap:7px;align-items:center;margin-bottom:7px}
+  .tag{font-size:10px;font-weight:700;letter-spacing:.12em;padding:3px 8px;border-radius:2px}
+  .tag.dataset{background:#0e3a20;color:#9fc4b1;border:1px solid rgba(255,255,255,.16)}
+  .tag.pos{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+  .pid{font-family:var(--serif);font-weight:700;font-size:40px;line-height:1.02;letter-spacing:.01em}
+  .role-line{display:flex;align-items:center;gap:10px;margin-top:8px}
+  .role-line .bar{width:4px;height:17px;background:var(--gold);border-radius:2px}
+  .role-line .txt{letter-spacing:.22em;font-weight:700;font-size:13px;color:#e9f1ec}
+  .vitals{display:flex;gap:30px;margin-top:18px}
+  .vital .v{font-family:var(--serif);font-size:26px;font-weight:700;line-height:1}
+  .vital .v.muted{color:#6f9a81}
+  .vital .k{letter-spacing:.16em;font-size:8.5px;color:#9fc4b1;font-weight:700;margin-top:6px}
+  .vital .scoutpin{color:var(--gold);font-size:8.5px;font-weight:700;letter-spacing:.05em}
+  .hd-right{flex:0 0 252px;border-left:1px solid rgba(255,255,255,.18);padding-left:24px;
+    display:flex;flex-direction:column;gap:14px}
+  .hr-item .k{letter-spacing:.2em;font-size:8.5px;color:#9fc4b1;font-weight:700}
+  .hr-item .v{font-family:var(--serif);font-size:19px;font-weight:700;margin-top:3px}
+  .hr-item .v.val{color:var(--gold)}
+  .hr-item .v.flag{font-family:var(--sans);font-size:11px;font-weight:600;color:#c9a86a;
+    letter-spacing:.02em;line-height:1.35}
+
+  /* ---------- PROVENANCE STRIP ---------- */
+  .prov{display:flex;gap:18px;align-items:center;padding:9px 34px;background:#0e3a20;color:#cfe0d7;
+    font-size:11px;letter-spacing:.02em}
+  .prov .dot{display:inline-flex;align-items:center;gap:6px;font-weight:600}
+  .prov .swatch{width:11px;height:11px;border-radius:2px;display:inline-block}
+  .prov .sw-data{background:var(--green-2)}
+  .prov .sw-scout{background:var(--gold)}
+
+  /* ---------- BODY GRID ---------- */
+  .body{padding:20px 26px 8px}
+  .grid{display:grid;grid-template-columns:1.05fr 1fr 1.32fr 1.05fr;gap:16px}
+  .card{border:1px solid var(--line);border-radius:7px;padding:15px 16px;background:var(--paper)}
+  .card.scoutcard{background:var(--scout);border-color:var(--scout-line)}
+  .ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+  .ch h3{letter-spacing:.2em;font-size:11px;font-weight:700;color:var(--ink)}
+  .ch .src{font-size:8px;font-weight:700;letter-spacing:.1em;padding:2px 6px;border-radius:3px}
+  .src.data{background:#e7f0eb;color:var(--green-2)}
+  .src.scout{background:#f4e6c6;color:#a9792a}
+  .rule{height:2px;background:var(--green);width:30px;border-radius:2px;margin:-6px 0 11px}
+  .rule.amber{background:var(--gold)}
+
+  /* roles + pitch */
+  .roles{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+  .role{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600}
+  .role .pip{width:9px;height:9px;border-radius:50%}
+  .pip.p1{background:var(--green)} .pip.p2{background:var(--gold)}
+  .pitch{height:118px;border:1px solid var(--line);border-radius:5px;
+    background:
+      linear-gradient(90deg,rgba(14,124,90,.10) 0 50%,rgba(14,124,90,.16) 50% 100%),
+      var(--green);position:relative;overflow:hidden;margin-bottom:12px}
+  .pitch::before{content:"";position:absolute;inset:8px;border:1.4px solid rgba(255,255,255,.28);border-radius:3px}
+  .pitch::after{content:"";position:absolute;left:50%;top:8px;bottom:8px;width:1.4px;background:rgba(255,255,255,.28)}
+  .pitch .circ{position:absolute;left:50%;top:50%;width:42px;height:42px;border:1.4px solid rgba(255,255,255,.28);
+    border-radius:50%;transform:translate(-50%,-50%)}
+  .pdot{position:absolute;width:15px;height:15px;border-radius:50%;border:2px solid #fff;transform:translate(-50%,-50%)}
+  .pdot.d1{background:var(--gold)} .pdot.d2{background:var(--green-2)}
+  .style-p{font-size:11.5px;line-height:1.5;color:var(--ink)}
+  .style-cap{font-size:9.5px;color:var(--muted);font-style:italic;margin-top:8px;line-height:1.45}
+  .rec{margin-top:13px;display:flex;align-items:center;gap:12px}
+  .rec .pill{background:var(--green);color:#fff;font-weight:700;letter-spacing:.08em;font-size:12px;
+    padding:11px 13px;border-radius:5px;line-height:1.25;text-align:center}
+  .rec .score{font-family:var(--serif);font-size:34px;font-weight:700;color:var(--green)}
+  .rec .score small{font-size:15px;color:var(--muted)}
+
+  /* radar */
+  .radar-wrap{display:flex;flex-direction:column;align-items:center}
+  .radar-wrap svg{width:100%;height:auto}
+  .ov{text-align:center;margin-top:2px}
+  .subscores{display:grid;grid-template-columns:1fr 1fr;gap:5px 14px;margin-top:12px;font-size:11px}
+  .subscores .ss{display:flex;justify-content:space-between;border-bottom:1px dotted var(--line);padding-bottom:3px}
+  .subscores .ss b{font-family:var(--serif)}
+  .subscores .ss.flag{color:#a9792a}
+  .subscores .ss.flag b{color:var(--gold)}
+
+  /* key stats */
+  .ks-sub{font-size:9px;letter-spacing:.06em;color:var(--muted);text-align:right;line-height:1.3;
+    margin-top:-4px;margin-bottom:10px;font-weight:600}
+  .stat{margin-bottom:8px}
+  .stat .top{display:flex;justify-content:space-between;align-items:baseline;font-size:11.5px;margin-bottom:3px}
+  .stat .top .nm{color:var(--ink);font-weight:500}
+  .stat .top .vv{font-family:var(--serif);font-weight:700;font-size:12px}
+  .stat .barrow{display:flex;align-items:center;gap:8px}
+  .stat .track{flex:1;height:7px;background:var(--bar-track);border-radius:4px;overflow:hidden}
+  .stat .fill{height:100%;border-radius:4px}
+  .stat .pct{font-size:9.5px;font-weight:700;color:#fff;border-radius:9px;padding:1px 7px;min-width:30px;text-align:center}
+  .legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;padding-top:9px;border-top:1px solid var(--line);
+    font-size:8.5px;font-weight:700;letter-spacing:.04em;color:var(--muted)}
+  .legend i{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:4px;vertical-align:-1px}
+  .ctxrow{display:flex;gap:18px;margin-top:11px;padding-top:9px;border-top:1px solid var(--line)}
+  .ctxrow .c .k{font-size:8px;letter-spacing:.12em;color:var(--muted);font-weight:700}
+  .ctxrow .c .v{font-family:var(--serif);font-weight:700;font-size:16px;margin-top:2px}
+  .ctxrow .c .v.flag{font-family:var(--sans);font-size:10px;color:#a9792a;font-weight:700}
+
+  /* scout summary card text */
+  .scout-h{letter-spacing:.14em;font-size:11px;font-weight:700;color:#8a6418;margin:2px 0 6px}
+  .scout-body{font-size:11px;line-height:1.5;color:#6a5526}
+  .scout-flag{display:flex;gap:7px;align-items:flex-start;font-size:10.5px;color:#8a6418;
+    background:#f6ecd2;border:1px dashed var(--scout-line);border-radius:5px;padding:8px 9px;margin-top:10px;line-height:1.45}
+  .scout-flag .ic{font-weight:800;color:var(--gold)}
+
+  /* ---------- ATTRIBUTE BREAKDOWN ROW ---------- */
+  .attr-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:4px 26px 0}
+  .attr{border:1px solid var(--line);border-radius:7px;padding:13px 15px}
+  .attr.scoutcard{background:var(--scout);border-color:var(--scout-line)}
+  .attr .at-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}
+  .attr .at-h .nm{letter-spacing:.16em;font-size:11px;font-weight:700}
+  .attr .at-h .sc{font-family:var(--serif);font-size:22px;font-weight:700}
+  .attr .at-h .sc small{font-size:11px;color:var(--muted)}
+  .attr .mini{height:5px;background:var(--bar-track);border-radius:3px;overflow:hidden;margin:6px 0 10px}
+  .attr .mini i{display:block;height:100%;border-radius:3px}
+  .attr ul{list-style:none}
+  .attr li{font-size:10.5px;line-height:1.45;color:var(--ink);padding-left:13px;position:relative;margin-bottom:5px}
+  .attr li::before{content:"";position:absolute;left:0;top:6px;width:5px;height:5px;border-radius:50%;background:var(--green-2)}
+  .attr.scoutcard li::before{background:var(--gold)}
+  .attr.scoutcard li{color:#6a5526}
+  .attr.scoutcard .nm{color:#8a6418} .attr.scoutcard .sc{color:var(--gold)}
+
+  /* ---------- STRENGTHS / DEV / RISKS ---------- */
+  .sdr{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:16px 26px 22px}
+  .sdr .col{border:1px solid var(--line);border-radius:7px;padding:14px 16px}
+  .sdr .col h4{letter-spacing:.14em;font-size:11px;font-weight:700;display:flex;align-items:center;gap:7px;
+    padding-bottom:8px;margin-bottom:9px;border-bottom:2px solid var(--line)}
+  .sdr .s h4{border-color:var(--green-2);color:var(--green)}
+  .sdr .d h4{border-color:var(--gold);color:#a9792a}
+  .sdr .r h4{border-color:var(--below);color:var(--below)}
+  .sdr ul{list-style:none}
+  .sdr li{font-size:11px;line-height:1.45;padding-left:14px;position:relative;margin-bottom:6px;color:var(--ink)}
+  .sdr li::before{content:"";position:absolute;left:0;top:6px;width:5px;height:5px;border-radius:50%}
+  .sdr .s li::before{background:var(--green-2)} .sdr .d li::before{background:var(--gold)}
+  .sdr .r li::before{background:var(--below)}
+  .sdr li.scoutmark{color:#a9792a}
+  .sdr li.scoutmark::before{background:var(--gold)!important}
+  .sdr li .pin{font-size:8px;font-weight:800;letter-spacing:.06em;color:var(--gold);
+    border:1px solid var(--scout-line);border-radius:3px;padding:0 4px;margin-left:5px;vertical-align:1px}
+
+  /* ---------- FOOTER ---------- */
+  .ft{background:var(--green);color:#cfe0d7;padding:11px 34px;display:flex;justify-content:space-between;
+    align-items:center;font-size:10.5px;letter-spacing:.03em}
+  .ft b{color:#fff}
+  .ft .right{color:#9fc4b1}
+
+  @media print{ html,body{background:#fff} .page{width:auto} }
+</style>
+</head>
+<body>
+<div class="page" id="page">
+
+  <!-- HEADER -->
+  <header class="hd">
+    <div class="hd-top">
+      <div class="ttl">SCOUTING REPORT<small id="reporttype">MODEL OUTPUT · DATA LAYER</small></div>
+      <div class="rd"><div class="lab">REPORT DATE</div><div class="val" id="rdate">27 JUNE 2026</div></div>
+    </div>
+    <div class="hd-main">
+      <div class="avatar" id="avatar">PHOTO<br>WITHHELD<br>(anonymised<br>dataset)</div>
+      <div class="id-block">
+        <div class="id-tags">
+          <span class="tag dataset" id="datatag">DATASET ID · 4471</span>
+          <span class="tag pos" id="postag">CENTRE-FORWARD</span>
+        </div>
+        <div class="pid" id="pname">Permanent Pick — CF</div>
+        <div class="role-line"><span class="bar"></span><span class="txt" id="archetype">MOBILE LINK-9 · CUCHO MOULD</span></div>
+        <div class="vitals" id="vitals"><!-- filled by JS --></div>
+      </div>
+      <div class="hd-right" id="hdright"><!-- filled by JS --></div>
+    </div>
+  </header>
+
+  <!-- PROVENANCE STRIP -->
+  <div class="prov">
+    <span style="font-weight:700;letter-spacing:.1em">FIELD SOURCE</span>
+    <span class="dot"><span class="swatch sw-data"></span>Populated from the model — season per-90 + role KPIs (Final_Task_Data)</span>
+    <span class="dot"><span class="swatch sw-scout"></span>Flagged for video / live-scout input — not in the dataset</span>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+    <div class="grid">
+
+      <!-- POSITION & STYLE -->
+      <section class="card">
+        <div class="ch"><h3>POSITION &amp; STYLE</h3><span class="src data">MODEL</span></div>
+        <div class="rule"></div>
+        <div class="roles" id="roles"></div>
+        <div class="pitch"><span class="circ"></span><span class="pdot d1" id="pdot1"></span><span class="pdot d2" id="pdot2"></span></div>
+        <p class="style-p" id="stylep"></p>
+        <p class="style-cap">Narrative auto-generated from season percentiles. On-ball decision quality, contact strength and temperament require video confirmation.</p>
+        <div class="rec">
+          <div class="pill" id="recpill">PRIORITISE<br>BUY-YOUNG / SELL-HIGH</div>
+          <div class="score" id="recscore">8.4<small>/10</small></div>
+        </div>
+      </section>
+
+      <!-- ATTRIBUTE OVERVIEW (RADAR) -->
+      <section class="card">
+        <div class="ch"><h3>ATTRIBUTE OVERVIEW</h3><span class="src data">MODEL</span></div>
+        <div class="rule"></div>
+        <div class="radar-wrap" id="radarwrap"></div>
+        <div class="subscores" id="subscores"></div>
+      </section>
+
+      <!-- KEY STATS -->
+      <section class="card">
+        <div class="ch"><h3>KEY STATS · ROLE KPIs</h3><span class="src data">MODEL</span></div>
+        <div class="rule"></div>
+        <div class="ks-sub" id="kssub">PERCENTILE VS CF POOL · LEAGUE-ADJUSTED · DATA 2024-25</div>
+        <div id="stats"></div>
+        <div class="legend">
+          <span><i style="background:var(--elite)"></i>ELITE (80+)</span>
+          <span><i style="background:var(--good)"></i>GOOD (60–79)</span>
+          <span><i style="background:var(--avg)"></i>AVERAGE (40–59)</span>
+          <span><i style="background:var(--below)"></i>BELOW (&lt;40)</span>
+        </div>
+        <div class="ctxrow" id="ctxrow"></div>
+      </section>
+
+      <!-- SCOUT SUMMARY (FLAGGED) -->
+      <section class="card scoutcard">
+        <div class="ch"><h3>SCOUT SUMMARY</h3><span class="src scout">SCOUT INPUT</span></div>
+        <div class="rule amber"></div>
+        <div class="scout-h">WHAT THE MODEL CAN'T SEE</div>
+        <p class="scout-body">The data layer establishes <b>what</b> this profile does at elite volume. It cannot judge <b>how</b> — first-touch under pressure, body orientation, runs timed off the last shoulder, or temperament in a title race.</p>
+        <div class="scout-flag"><span class="ic">■</span><span><b>Match context</b> — single-game film &amp; live viewings. Season per-90 only in this dataset; no match-level or tracking data.</span></div>
+        <div class="scout-flag"><span class="ic">▲</span><span><b>Physical translation</b> — top speed, high-intensity distance &amp; duel robustness need tracking/GPS, not event data.</span></div>
+        <div class="scout-flag"><span class="ic">●</span><span><b>Psychological (5Cs)</b> — character, communication, concentration: live-scout &amp; reference work.</span></div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ATTRIBUTE BREAKDOWN -->
+  <div class="attr-row" id="attrrow"></div>
+
+  <!-- STRENGTHS / DEV / RISKS -->
+  <div class="sdr">
+    <div class="col s"><h4>✓ STRENGTHS <span style="font-size:8px;color:var(--green-2);letter-spacing:.06em">DATA-DERIVED</span></h4><ul id="strengths"></ul></div>
+    <div class="col d"><h4>△ DEVELOPMENT AREAS <span style="font-size:8px;color:#a9792a;letter-spacing:.06em">DATA-DERIVED</span></h4><ul id="dev"></ul></div>
+    <div class="col r"><h4>▲ POTENTIAL RISKS</h4><ul id="risks"></ul></div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="ft">
+    <div><b>Yuya Watanabe</b> &nbsp;·&nbsp; Role-Fit Recruitment Model &nbsp;·&nbsp; PFSA Level 2</div>
+    <div class="right" id="footnote">Data layer of a scouting report — green fields feed the scout's video &amp; live-scout stages (PFSA stages 3–6)</div>
+  </footer>
+
+</div>
+
+<script>
+/* ===========================================================
+   EDIT ONLY THIS OBJECT TO REUSE THE TEMPLATE.
+   Percentile values shown are this model's real output for its
+   top PERMANENT centre-forward pick (Club Brugge, 21).
+   `null` / scout:true fields render as flagged (amber) slots.
+   =========================================================== */
+const PLAYER = {
+  datasetId: "4471",
+  position:  "CENTRE-FORWARD",
+  archetype: "MOBILE LINK-9 · CUCHO MOULD",
+  displayName: "Permanent Pick — CF",
+  reportType:  "MODEL OUTPUT · DATA LAYER",
+  reportDate:  "27 JUNE 2026",
+
+  // vitals (left). scout-only fields use {flag:true}
+  age: 21,
+  height:  {flag:true, label:"SCOUT / TM"},   // not in dataset
+  foot:    {flag:true, label:"NOT IN DATA"},  // explicitly absent
+  squadNo: {flag:true, label:"N/A"},
+
+  // header right
+  club: "Club Brugge",
+  league: "Jupiler Pro League",
+  contract: {flag:true, label:"Scout / Transfermarkt"}, // not in dataset
+  marketValue: "€6.0M",
+
+  bestRoles: ["Mobile link-9 (Cucho mould)", "High-press forward"],
+  pitchDots: [ {x:62, y:34, cls:"d1"}, {x:48, y:58, cls:"d2"} ], // % of pitch box
+
+  recommendation: { label:"PRIORITISE<br>BUY-YOUNG / SELL-HIGH", score:"8.4" },
+
+  // radar + key-stats share these role KPIs (percentile vs CF pool)
+  kpis: [
+    {name:"Creation (xA)",        pct:96},
+    {name:"Goal threat (npxG)",   pct:94},
+    {name:"Link (xGChain)",       pct:94},
+    {name:"Pressing",             pct:92},
+    {name:"Carrying (final 3rd)", pct:83},
+    {name:"Dribbling",            pct:58, note:"reconstructed"}
+  ],
+
+  // composite attribute scores (/10) derived from the KPI block.
+  // Physical & Mental are intentionally null -> render flagged.
+  attributes: {
+    Attacking: 9.0, Technical: 8.0, Tactical: 7.0, Defensive: 6.5,
+    Physical: null, Mental: null
+  },
+  overall: "8.0",
+
+  // raw counting context. Use {flag:true} where you haven't loaded it.
+  context: [
+    {k:"MINUTES",  v:{flag:true, label:"from CSV"}},
+    {k:"MATCHES",  v:{flag:true, label:"from CSV"}},
+    {k:"G / A",    v:{flag:true, label:"from CSV"}}
+  ],
+
+  attrBullets: {
+    Technical: ["Elite chance creation (96th xA).","High-volume link play (94th xGChain).","Final-third carrying above pool median (83rd)."],
+    Tactical:  ["Profile fits a possession, line-breaking front line.","Combines and presses — suits an interchanging front three.","Best alongside a target/runner foil."],
+    Physical:  null,  // -> flagged card
+    Mental:    null   // -> flagged card
+  },
+
+  strengths: [
+    "Chance creation — 96th pct (xA)",
+    "Goal threat — 94th pct (npxG)",
+    "Link play — 94th pct (xGChain)",
+    "Pressing volume — 92nd pct"
+  ],
+  development: [
+    "Dribbling / 1v1 beating — 58th pct",
+    "Carrying not yet elite — 83rd vs 90+ peers",
+    "Profile leans creator over pure finisher"
+  ],
+  risks: [
+    {t:"Sample / minutes load not yet checked", scout:false},
+    {t:"Step-up from feeder league unproven", scout:false},
+    {t:"Injury & availability history", scout:true},
+    {t:"Physical robustness vs PL/Bundesliga duels", scout:true}
+  ]
+};
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const band = p => p>=80?'var(--elite)':p>=60?'var(--good)':p>=40?'var(--avg)':'var(--below)';
+const flagSpan = (f) => `<span class="scoutpin">⟶ ${f.label}</span>`;
+
+function fillHeader(){
+  $('#reporttype').textContent = PLAYER.reportType;
+  $('#rdate').textContent = PLAYER.reportDate;
+  $('#datatag').textContent = "DATASET ID · " + PLAYER.datasetId;
+  $('#postag').textContent = PLAYER.position;
+  $('#pname').textContent = PLAYER.displayName;
+  $('#archetype').textContent = PLAYER.archetype;
+
+  const vit = [
+    {v:PLAYER.age, k:"AGE"},
+    PLAYER.height.flag ? {flag:PLAYER.height, k:"HEIGHT"} : {v:PLAYER.height,k:"HEIGHT"},
+    PLAYER.foot.flag   ? {flag:PLAYER.foot,   k:"FOOT"}   : {v:PLAYER.foot,k:"FOOT"},
+    PLAYER.squadNo.flag? {flag:PLAYER.squadNo,k:"SQUAD #"}: {v:PLAYER.squadNo,k:"SQUAD #"}
+  ];
+  $('#vitals').innerHTML = vit.map(o=>{
+    const val = o.flag ? `<div class="v muted" style="font-size:13px">—</div><div class="scoutpin">${o.flag.label}</div>`
+                       : `<div class="v">${o.v}</div>`;
+    return `<div class="vital">${val}<div class="k">${o.k}</div></div>`;
+  }).join('');
+
+  $('#hdright').innerHTML = `
+    <div class="hr-item"><div class="k">CLUB</div><div class="v">${PLAYER.club}</div></div>
+    <div class="hr-item"><div class="k">LEAGUE</div><div class="v" style="font-size:15px">${PLAYER.league}</div></div>
+    <div class="hr-item"><div class="k">CONTRACT EXPIRY</div><div class="v flag">⟶ ${PLAYER.contract.label} · not in dataset</div></div>
+    <div class="hr-item"><div class="k">MARKET VALUE (EST.)</div><div class="v val">${PLAYER.marketValue}</div></div>`;
+}
+
+function fillStyle(){
+  $('#roles').innerHTML = PLAYER.bestRoles.map((r,i)=>
+    `<div class="role"><span class="pip p${i+1}"></span>${r}</div>`).join('');
+  const d = PLAYER.pitchDots;
+  $('#pdot1').style.left=d[0].x+'%'; $('#pdot1').style.top=d[0].y+'%';
+  $('#pdot2').style.left=d[1].x+'%'; $('#pdot2').style.top=d[1].y+'%';
+  const k = PLAYER.kpis;
+  $('#stylep').innerHTML =
+    `A complete possession-forward: top-percentile chance creation (${k[0].pct}th), goal threat (${k[1].pct}th) and link play (${k[2].pct}th), with high-volume pressing (${k[3].pct}th) and above-median carrying (${k[4].pct}th). Combines, presses and finishes — the Cucho mould.`;
+  $('#recpill').innerHTML = PLAYER.recommendation.label;
+  $('#recscore').innerHTML = PLAYER.recommendation.score + '<small>/10</small>';
+}
+
+function radar(){
+  const ax = PLAYER.kpis, n = ax.length, cx=150, cy=140, R=98;
+  const ang = i => (-90 + i*360/n) * Math.PI/180;
+  const pt = (i,r)=>[cx+Math.cos(ang(i))*r, cy+Math.sin(ang(i))*r];
+  let g='';
+  [0.25,0.5,0.75,1].forEach(f=>{
+    const p = ax.map((_,i)=>pt(i,R*f).join(',')).join(' ');
+    g += `<polygon points="${p}" fill="none" stroke="#E4EAE6" stroke-width="1"/>`;
+  });
+  ax.forEach((_,i)=>{ const [x,y]=pt(i,R); g+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#E4EAE6" stroke-width="1"/>`; });
+  const poly = ax.map((a,i)=>pt(i,R*a.pct/100).join(',')).join(' ');
+  g += `<polygon points="${poly}" fill="rgba(14,124,90,.18)" stroke="var(--green-2)" stroke-width="2.5"/>`;
+  ax.forEach((a,i)=>{ const [x,y]=pt(i,R*a.pct/100); g+=`<circle cx="${x}" cy="${y}" r="3" fill="var(--green-2)"/>`; });
+  // labels
+  ax.forEach((a,i)=>{
+    let [x,y]=pt(i,R+20); let anch='middle';
+    if(x<cx-12)anch='end'; else if(x>cx+12)anch='start';
+    const lbl = a.name.replace(/\s*\(.*\)/,'');
+    g+=`<text x="${x}" y="${y}" font-size="9.5" font-weight="700" fill="#1D2B24" text-anchor="${anch}" dominant-baseline="middle">${lbl}</text>`;
+    const sub = (a.name.match(/\((.*)\)/)||[])[1];
+    if(sub) g+=`<text x="${x}" y="${y+10}" font-size="7.5" fill="#5C6B62" text-anchor="${anch}">${sub}</text>`;
+  });
+  g+=`<circle cx="${cx}" cy="${cy}" r="30" fill="#fff" stroke="var(--green-2)" stroke-width="2"/>`;
+  g+=`<text x="${cx}" y="${cy-3}" font-size="22" font-weight="700" fill="var(--green)" text-anchor="middle" font-family="Georgia,serif">${PLAYER.overall}</text>`;
+  g+=`<text x="${cx}" y="${cy+12}" font-size="7.5" letter-spacing="1.5" fill="#5C6B62" text-anchor="middle" font-weight="700">OVERALL</text>`;
+  $('#radarwrap').innerHTML = `<svg viewBox="-18 0 336 290" xmlns="http://www.w3.org/2000/svg">${g}</svg>`;
+
+  // sub-scores under radar
+  const a = PLAYER.attributes;
+  $('#subscores').innerHTML = Object.entries(a).map(([k,v])=>{
+    if(v===null) return `<div class="ss flag">${k} <b>scout</b></div>`;
+    return `<div class="ss">${k} <b>${v.toFixed(1)}</b></div>`;
+  }).join('');
+}
+
+function keyStats(){
+  $('#stats').innerHTML = PLAYER.kpis.map(s=>{
+    const c = band(s.pct);
+    const note = s.note ? ` <span style="font-size:8px;color:var(--muted)">(${s.note})</span>`:'';
+    return `<div class="stat">
+      <div class="top"><span class="nm">${s.name}${note}</span><span class="vv">${s.pct}th</span></div>
+      <div class="barrow"><div class="track"><div class="fill" style="width:${s.pct}%;background:${c}"></div></div>
+      <span class="pct" style="background:${c}">${s.pct}</span></div></div>`;
+  }).join('');
+  $('#ctxrow').innerHTML = PLAYER.context.map(c=>{
+    const v = c.v.flag ? `<div class="v flag">⟶ ${c.v.label}</div>` : `<div class="v">${c.v}</div>`;
+    return `<div class="c"><div class="k">${c.k}</div>${v}</div>`;
+  }).join('');
+}
+
+function attrBreakdown(){
+  const a = PLAYER.attributes, b = PLAYER.attrBullets;
+  const order = ["Technical","Tactical","Physical","Mental"];
+  $('#attrrow').innerHTML = order.map(name=>{
+    const score = a[name], bullets = b[name];
+    if(score===null || bullets===null){
+      const why = {
+        Physical:"Needs tracking / GPS — speed, high-intensity distance, duel robustness. Event data can't measure it.",
+        Mental:"Needs live-scout &amp; references — character, concentration, communication (5Cs)."
+      }[name] || "Requires video / live-scout input.";
+      return `<div class="attr scoutcard">
+        <div class="at-h"><span class="nm">${name.toUpperCase()}</span><span class="sc">—<small>/10</small></span></div>
+        <div class="mini"><i style="width:18%;background:var(--gold);opacity:.5"></i></div>
+        <ul><li>${why}</li><li><b>Flagged for scout input</b> — not in this dataset.</li></ul></div>`;
+    }
+    const c = score>=8?'var(--green-2)':score>=6.5?'#7FB07F':'var(--gold)';
+    return `<div class="attr">
+      <div class="at-h"><span class="nm">${name.toUpperCase()}</span><span class="sc">${score.toFixed(1)}<small>/10</small></span></div>
+      <div class="mini"><i style="width:${score*10}%;background:${c}"></i></div>
+      <ul>${bullets.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+  }).join('');
+}
+
+function sdr(){
+  $('#strengths').innerHTML = PLAYER.strengths.map(x=>`<li>${x}</li>`).join('');
+  $('#dev').innerHTML = PLAYER.development.map(x=>`<li>${x}</li>`).join('');
+  $('#risks').innerHTML = PLAYER.risks.map(r=>
+    r.scout ? `<li class="scoutmark">${r.t}<span class="pin">SCOUT</span></li>` : `<li>${r.t}</li>`
+  ).join('');
+}
+
+fillHeader(); fillStyle(); radar(); keyStats(); attrBreakdown(); sdr();
+</script>
+</body>
+</html>
